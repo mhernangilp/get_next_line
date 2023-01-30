@@ -1,9 +1,4 @@
 
-#include <stddef.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
 #include "get_next_line.h"
 
 char *get_next_line(int fd)
@@ -12,6 +7,9 @@ char *get_next_line(int fd)
 	size_t	i;
 	ssize_t	check;
 
+	if (fd < 0)
+		return (NULL);
+	//printf("%d", get_line_length(fd));
 	buf = malloc(50);
 	i = 0;
 	do {
@@ -25,7 +23,7 @@ char *get_next_line(int fd)
 	buf[i] = '\0';
 	return buf;
 }
-/*
+
 int main(void)
 {
 	int	fd;
@@ -43,10 +41,10 @@ int main(void)
 				printf("%s", print);
 		}while (print);
 		close(fd);
-		if (!nr_bytes)
+		/*if (!nr_bytes)
 			printf("Archivo vacio\n");
 		else
-			printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);
+			printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);*/
 	}
 	return 0;
-}*/
+}
