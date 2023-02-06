@@ -10,5 +10,6 @@
 
 char	*get_next_line(int fd);
 int	get_line_length(int fd);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 
 #endif

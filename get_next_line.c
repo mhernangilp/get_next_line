@@ -3,17 +3,17 @@
 
 char *get_next_line(int fd)
 {
-	char *buf;
+	char	*buf;
+	char	*ret;
 	size_t	i;
 	ssize_t	check;
 
 	if (fd < 0)
 		return (NULL);
-	//printf("%d", get_line_length(fd));
-	buf = malloc(50);
+	buf = malloc(1000100);
 	i = 0;
 	do {
-		check = read(fd, buf + i, 1);
+		check = read(fd, &buf[i], 1);
 		if (!check)
 			break;
 		i++;
@@ -21,9 +21,12 @@ char *get_next_line(int fd)
 	if (!check)
 		return (NULL);
 	buf[i] = '\0';
-	return buf;
+	ret = malloc(sizeof(char) * i + 1);
+	ft_strlcpy(ret, buf, ft_strlen(buf) + 1);
+	free(buf);
+	return ret;
 }
-
+/*
 int main(void)
 {
 	int	fd;
@@ -41,10 +44,10 @@ int main(void)
 				printf("%s", print);
 		}while (print);
 		close(fd);
-		/*if (!nr_bytes)
-			printf("Archivo vacio\n");
-		else
-			printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);*/
+		//if (!nr_bytes)
+		//	printf("Archivo vacio\n");
+		//else
+		//	printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);
 	}
 	return 0;
-}
+}*/
