@@ -1,22 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/07 13:59:58 by mhernang          #+#    #+#             */
+/*   Updated: 2023/02/07 14:03:03 by mhernang         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "get_next_line.h"
-
-int	get_line_length(int fd)
-{
-	ssize_t	check;
-	size_t	i;
-	char	*buf;
-
-	buf = malloc(1);
-	i = 0;
-	do {
-		check = read(fd, buf + i, 1);
-		if (!check)
-			break;
-		i++;
-	}while (buf[i-1] != '\n');
-	return (i);
-}
 
 char	*ft_strcpy(char *dest, const char *src)
 {

@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
+/*   Updated: 2023/02/07 14:23:56 by mhernang         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	char	*buf;
 	char	*ret;
@@ -10,15 +21,13 @@ char *get_next_line(int fd)
 
 	if (fd < 0)
 		return (NULL);
-	buf = malloc(1000100);
+	buf = malloc(9999);
 	if (!buf)
 		return (NULL);
 	i = 0;
-	do {
-		check = read(fd, &buf[i], 1);
-		//printf("Leo el caracter '%c' con check = %zd\n", buf[i], check);
-		i++;
-	}while (buf[i-1] != '\n' && check);
+	do
+		check = read(fd, &buf[i++], 1);
+	while (buf[i - 1] != '\n' && check);
 	if (!check)
 	{
 		if (i == 1)
@@ -33,7 +42,7 @@ char *get_next_line(int fd)
 	ret = malloc(sizeof(char) * i + 1);
 	ft_strcpy(ret, buf);
 	free(buf);
-	return ret;
+	return (ret);
 }
 /*
 int main(void)
