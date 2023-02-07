@@ -16,15 +16,18 @@ char *get_next_line(int fd)
 	i = 0;
 	do {
 		check = read(fd, &buf[i], 1);
-		printf("Leo el caracter '%c' con check = %zd\n", buf[i], check);
-		if (!check)
-			break;
+		//printf("Leo el caracter '%c' con check = %zd\n", buf[i], check);
 		i++;
-	}while (buf[i-1] != '\n');
+	}while (buf[i-1] != '\n' && check);
 	if (!check)
 	{
-		free(buf);
-		return (NULL);
+		if (i == 1)
+		{
+			free(buf);
+			return (NULL);
+		}
+		else
+			i--;
 	}
 	buf[i] = '\0';
 	ret = malloc(sizeof(char) * i + 1);
@@ -32,19 +35,20 @@ char *get_next_line(int fd)
 	free(buf);
 	return ret;
 }
-
+/*
 int main(void)
 {
 	int	fd;
 	char	*print;
 	ssize_t	nr_bytes;
 
-	fd = open("file.txt", O_RDONLY);
+	fd = open("files/file.txt", O_RDONLY);
 	if (fd == -1)
 		printf("Error al abrir archivo\n");
 	else
 	{
 		do {
+			//printf("leo linea\n");
 			print = get_next_line(fd);
 			if (print)
 				printf("%s", print);
@@ -56,4 +60,4 @@ int main(void)
 		//	printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);
 	}
 	return 0;
-}
+}*/
