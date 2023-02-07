@@ -18,21 +18,16 @@ int	get_line_length(int fd)
 	return (i);
 }
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+char	*ft_strcpy(char *dest, const char *src)
 {
-	size_t	i;
-	size_t	c;
+	int	i;
 
 	i = 0;
-	c = ft_strlen(src);
-	if (size != 0)
+	while (src[i])
 	{
-		while (src[i] && (i < (size - 1)))
-		{
-			dest[i] = src[i];
-			i++;
-		}
-		dest[i] = '\0';
+		dest[i] = src[i];
+		i++;
 	}
-	return (c);
+	dest[i] = '\0';
+	return (dest);
 }

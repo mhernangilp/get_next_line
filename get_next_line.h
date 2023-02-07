@@ -9,7 +9,7 @@
 # include <fcntl.h>
 
 char	*get_next_line(int fd);
-int	get_line_length(int fd);
-size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+int		get_line_length(int fd);
+char	*ft_strcpy(char *dest, const char *src);
 
 #endif

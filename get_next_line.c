@@ -11,22 +11,28 @@ char *get_next_line(int fd)
 	if (fd < 0)
 		return (NULL);
 	buf = malloc(1000100);
+	if (!buf)
+		return (NULL);
 	i = 0;
 	do {
 		check = read(fd, &buf[i], 1);
+		printf("Leo el caracter '%c' con check = %zd\n", buf[i], check);
 		if (!check)
 			break;
 		i++;
 	}while (buf[i-1] != '\n');
 	if (!check)
+	{
+		free(buf);
 		return (NULL);
+	}
 	buf[i] = '\0';
 	ret = malloc(sizeof(char) * i + 1);
-	ft_strlcpy(ret, buf, ft_strlen(buf) + 1);
+	ft_strcpy(ret, buf);
 	free(buf);
 	return ret;
 }
-/*
+
 int main(void)
 {
 	int	fd;
@@ -50,4 +56,4 @@ int main(void)
 		//	printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);
 	}
 	return 0;
-}*/
+}
