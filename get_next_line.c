@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/07 14:23:56 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/09 11:14:23 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	i = 0;
 	do
-		check = read(fd, &buf[i++], 1);
+		check = read(fd, &buf[i++], BUFFER_SIZE);
 	while (buf[i - 1] != '\n' && check);
 	if (!check)
 	{
@@ -44,7 +44,7 @@ char	*get_next_line(int fd)
 	free(buf);
 	return (ret);
 }
-/*
+
 int main(void)
 {
 	int	fd;
@@ -69,4 +69,4 @@ int main(void)
 		//	printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);
 	}
 	return 0;
-}*/
+}
