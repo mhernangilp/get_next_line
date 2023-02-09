@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/09 11:14:23 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/09 13:29:07 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*get_next_line(int fd)
 {
 	char	*buf;
-	char	*ret;
+	char	*ret = NULL;
 	size_t	i;
 	ssize_t	check;
 
@@ -24,23 +24,27 @@ char	*get_next_line(int fd)
 	buf = malloc(9999);
 	if (!buf)
 		return (NULL);
-	i = 0;
-	do
-		check = read(fd, &buf[i++], BUFFER_SIZE);
-	while (buf[i - 1] != '\n' && check);
-	if (!check)
+	if (BUFFER_SIZE == 1)
 	{
-		if (i == 1)
+		i = 0;
+		do
+			check = read(fd, &buf[i++], 1);
+		while (buf[i - 1] != '\n' && check);
+		if (!check)
 		{
-			free(buf);
-			return (NULL);
+			if (i == 1)
+			{
+				free(buf);
+				return (NULL);
+			}
+			else
+				i--;
 		}
-		else
-			i--;
-	}
-	buf[i] = '\0';
-	ret = malloc(sizeof(char) * i + 1);
-	ft_strcpy(ret, buf);
+		buf[i] = '\0';
+		ret = malloc(sizeof(char) * i + 1);
+		ft_strcpy(ret, buf);
+	} else
+		ret = option2(fd, buf, ret);
 	free(buf);
 	return (ret);
 }
@@ -59,6 +63,7 @@ int main(void)
 		do {
 			//printf("leo linea\n");
 			print = get_next_line(fd);
+			printf("print: '%s'\n", print);
 			if (print)
 				printf("%s", print);
 		}while (print);

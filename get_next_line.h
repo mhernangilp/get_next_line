@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 14:03:45 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/09 11:10:38 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/09 13:29:09 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <fcntl.h>
 
 char	*get_next_line(int fd);
-int		get_line_length(int fd);
 char	*ft_strcpy(char *dest, const char *src);
+char	*option2(int fd, char *buf, char *ret);
 
 #endif
