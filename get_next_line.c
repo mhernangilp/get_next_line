@@ -14,37 +14,38 @@
 
 char	*get_next_line(int fd)
 {
-	char	*buf;
-	char	*ret = NULL;
-	size_t	i;
-	ssize_t	check;
+	static char	*mem;
+	char		*buf;
+	char		*ret;
+	ssize_t		check;
+	size_t		i;
 
-	if (fd < 0)
-		return (NULL);
 	buf = malloc(9999);
 	if (!buf)
 		return (NULL);
-	if (BUFFER_SIZE == 1)
+	i = 0;
+	if (mem)
 	{
-		i = 0;
-		do
-			check = read(fd, &buf[i++], 1);
-		while (buf[i - 1] != '\n' && check);
-		if (!check)
+		if (mem[0])
 		{
-			if (i == 1)
-			{
-				free(buf);
-				return (NULL);
-			}
-			else
-				i--;
+			printf("Entro 1\n");
+			ft_strcpy(buf, mem);
+			i = ft_strlen(mem);
 		}
-		buf[i] = '\0';
-		ret = malloc(sizeof(char) * i + 1);
-		ft_strcpy(ret, buf);
-	} else
-		ret = option2(fd, buf, ret);
+		free(mem);
+	}
+	do {
+		check = read(fd, &buf[i], BUFFER_SIZE);
+		//write(1, "--", 2);
+		//write(1, &buf[i], 10);
+		//write(1, "--", 2);
+		i += check;
+	}while (check && !line_has_n(buf, i));
+	if (!check)
+		return (NULL);
+	ret = malloc(sizeof(char) * line_has_n(buf, i) + 1);
+	ft_strlcpy(ret, buf, line_has_n(buf, i) + 2);
+	mem = ft_substr(buf, line_has_n(buf, i) + 1, i - line_has_n(buf, i));
 	free(buf);
 	return (ret);
 }
@@ -63,9 +64,8 @@ int main(void)
 		do {
 			//printf("leo linea\n");
 			print = get_next_line(fd);
-			printf("print: '%s'\n", print);
 			if (print)
-				printf("%s", print);
+				printf("'%s'", print);
 		}while (print);
 		close(fd);
 		//if (!nr_bytes)

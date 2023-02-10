@@ -25,6 +25,9 @@
 
 char	*get_next_line(int fd);
 char	*ft_strcpy(char *dest, const char *src);
-char	*option2(int fd, char *buf, char *ret);
+size_t	ft_strlen(const char *str);
+int	line_has_n(char *buf, size_t i);
+size_t	ft_strlcpy(char *dest, const char *src, size_t size);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 #endif
