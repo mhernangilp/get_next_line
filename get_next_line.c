@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/09 13:29:07 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/12 20:59:30 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,35 @@
 
 char	*get_next_line(int fd)
 {
-	static char	*mem;
+	static char	*mem = NULL;
 	char		*buf;
 	char		*ret;
 	ssize_t		check;
-	size_t		i;
 
-	buf = malloc(9999);
+	buf = malloc(BUFFER_SIZE);
 	if (!buf)
 		return (NULL);
-	i = 0;
-	if (mem)
+	printf("Mem al inicio: '%s'\n", mem);
+	if (mem && line_has_n(mem))
 	{
-		if (mem[0])
-		{
-			printf("Entro 1\n");
-			ft_strcpy(buf, mem);
-			i = ft_strlen(mem);
-		}
-		free(mem);
+		printf("Ya tenemos en mem guardado con mem: %s\n", mem);
+		ret = return_mem(mem, 1);
+		return (ret);
 	}
-	do {
-		check = read(fd, &buf[i], BUFFER_SIZE);
-		//write(1, "--", 2);
-		//write(1, &buf[i], 10);
-		//write(1, "--", 2);
-		i += check;
-	}while (check && !line_has_n(buf, i));
+	check = read(fd, buf, BUFFER_SIZE);
+	mem = cat_mem_buf(mem, buf, check);
+	printf("Mem antes de bucle: %s\n", mem);
+	while (!check && !line_has_n(mem))
+	{
+		check = read(fd, buf, BUFFER_SIZE);
+		mem = cat_mem_buf(mem, buf, check);
+	}
+	printf("Mem despues del bucle: %s\n", mem);
 	if (!check)
 		return (NULL);
-	ret = malloc(sizeof(char) * line_has_n(buf, i) + 1);
-	ft_strlcpy(ret, buf, line_has_n(buf, i) + 2);
-	mem = ft_substr(buf, line_has_n(buf, i) + 1, i - line_has_n(buf, i));
+	ret = return_mem(mem, 1);
+	mem = ret_out_mem(mem, ret);
+	printf("Mem antes de salir: %s\n", mem);
 	free(buf);
 	return (ret);
 }
@@ -55,6 +52,7 @@ int main(void)
 	int	fd;
 	char	*print;
 	ssize_t	nr_bytes;
+	int	num = 2;
 
 	fd = open("files/file.txt", O_RDONLY);
 	if (fd == -1)
@@ -65,8 +63,8 @@ int main(void)
 			//printf("leo linea\n");
 			print = get_next_line(fd);
 			if (print)
-				printf("'%s'", print);
-		}while (print);
+				printf("Sol: '%s'\n", print);
+		}while (print && --num > 0);
 		close(fd);
 		//if (!nr_bytes)
 		//	printf("Archivo vacio\n");
