@@ -45,7 +45,7 @@ char	*cat_mem_buf(char *mem, char *buf, int read)
 	return (mem);
 }
 
-char	*ret_out_mem(char *mem, char *ret)
+char	*ret_out_mem(char *mem)
 {
 	char	*temp;
 
@@ -59,7 +59,6 @@ char	*return_mem(char *mem, int mode)
 {
 	int		len;
 	char	*ret;
-	char	*temp;
 
 	if (!mode)
 		len = ft_strlen(mem);
@@ -80,40 +79,6 @@ char	*ft_strdup(const char *src)
 	return (target);
 }
 
-static void	sum(int *i, int *j)
-{
-	*i += 1;
-	*j += 1;
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	int		i;
-	int		j;
-	char	*t;
-
-	i = 0;
-	j = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	t = malloc(ft_strlen((char *) s1) + ft_strlen((char *) s2) + 1);
-	if (!t)
-		return (NULL);
-	while (s1[j])
-	{
-		t[i] = s1[j];
-		sum(&i, &j);
-	}
-	j = 0;
-	while (s2[j])
-	{
-		t[i] = s2[j];
-		sum(&i, &j);
-	}
-	t[i] = '\0';
-	return (t);
-}
-
 char	*ft_strcpy(char *dest, const char *src)
 {
 	int	i;
@@ -126,25 +91,6 @@ char	*ft_strcpy(char *dest, const char *src)
 	}
 	dest[i] = '\0';
 	return (dest);
-}
-
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	c;
-
-	i = 0;
-	c = ft_strlen(src);
-	if (size != 0)
-	{
-		while ((src[i] != '\0') && (i < (size - 1)))
-		{
-			dest[i] = src[i];
-			i++;
-		}
-		dest[i] = '\0';
-	}
-	return (c);
 }
 
 static int	get_optimal_len(char const *s, unsigned int start, size_t len)
