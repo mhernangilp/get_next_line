@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/17 12:23:20 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/17 12:53:59 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*get_next_line(int fd)
 	if (!buf)
 		return (NULL);
 	//printf("Mem al inicio: '%s'\n", mem);
-	if (mem && line_has_n(mem))
+	if (mem && line_has_n(mem) != -1)
 	{
 		//printf("Ya tenemos en mem guardado con mem: %s\n", mem);
 		ret = return_mem(mem, 1);
@@ -35,7 +35,7 @@ char	*get_next_line(int fd)
 	check = 1;
 	//printf("Mem antes de bucle: %s\n", mem);
 	//printf("Check: %ld line_has_n: %d\n", check, line_has_n(mem));
-	while (check && check != -1 && !line_has_n(mem))
+	while (check && check != -1 && line_has_n(mem) == -1)
 	{
 		//printf("Read buffer\n");
 		check = read(fd, buf, BUFFER_SIZE);
@@ -47,14 +47,17 @@ char	*get_next_line(int fd)
 	if (check == -1)
 	{
 		//printf("Entro check -1\n");
+		free(mem);  // ????
 		free(buf);
+		//system("leaks a.out");  // --
 		return (NULL);
-	} else if (line_has_n(mem))
+	} else if (line_has_n(mem) != -1)
 	{
 		//printf("Entro line_has_n(mem)\n");
 		ret = return_mem(mem, 1);
 		mem = ret_out_mem(mem);
 		free(buf);
+		//system("leaks a.out");  // --
 		return (ret);
 	} else
 	{
@@ -64,16 +67,17 @@ char	*get_next_line(int fd)
 			//printf("Entro mem[0] == /0\n");
 			free(buf);
 			free(mem);
+			//system("leaks a.out");  // --
 			return (NULL);
 		}
 		ret = return_mem(mem, 0);
 		mem = ret_out_mem(mem);
+		//system("leaks a.out");  // --
 		return (ret);
 	}
 	//printf("Mem antes de salir: %s\n", mem);
-	//system("leaks a.out");
 }
-/*
+
 int main(void)
 {
 	int	fd;
@@ -81,7 +85,7 @@ int main(void)
 	ssize_t	nr_bytes;
 	int	num = 50;
 
-	fd = open("files/file.txt", O_RDONLY);
+	fd = open("files/41_no_nl", O_RDONLY);
 	if (fd == -1)
 		printf("Error al abrir archivo\n");
 	else
@@ -99,4 +103,4 @@ int main(void)
 		//	printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);
 	}
 	return 0;
-}*/
+}
