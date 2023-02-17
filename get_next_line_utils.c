@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:59:58 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/12 20:59:28 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/17 12:23:22 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ char	*ret_out_mem(char *mem)
 {
 	char	*temp;
 
-	temp = ft_strdup(&mem[line_has_n(mem) + 1]);
+	if (line_has_n(mem))
+		temp = ft_strdup(&mem[line_has_n(mem) + 1]);
+	else
+		temp = ft_strdup(&mem[ft_strlen(mem)]);
 	free(mem);
 	mem = temp;
 	return (mem);
@@ -148,6 +151,8 @@ int	line_has_n(char *buf)
 {
 	ssize_t	j;
 
+	if (!buf)
+		return (0);
 	j = 0;
 	while (buf[j])
 	{

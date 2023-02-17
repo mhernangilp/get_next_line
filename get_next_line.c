@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/12 20:59:30 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/17 12:23:20 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@ char	*get_next_line(int fd)
 	buf = malloc(BUFFER_SIZE);
 	if (!buf)
 		return (NULL);
-	if (-1 == read(fd, buf, 1))
-		return (NULL);
-	mem = cat_mem_buf(mem, buf, 1);
 	//printf("Mem al inicio: '%s'\n", mem);
 	if (mem && line_has_n(mem))
 	{
@@ -35,36 +32,48 @@ char	*get_next_line(int fd)
 		mem = ret_out_mem(mem);
 		return (ret);
 	}
-	check = read(fd, buf, BUFFER_SIZE);
-	if (!check)
-	{
-		free(buf);
-		free(mem);
-		return (NULL);
-	}
-	mem = cat_mem_buf(mem, buf, check);
+	check = 1;
 	//printf("Mem antes de bucle: %s\n", mem);
 	//printf("Check: %ld line_has_n: %d\n", check, line_has_n(mem));
-	while (check == BUFFER_SIZE && !line_has_n(mem))
+	while (check && check != -1 && !line_has_n(mem))
 	{
 		//printf("Read buffer\n");
 		check = read(fd, buf, BUFFER_SIZE);
 		//printf("Check: %ld\n", check);
-		mem = cat_mem_buf(mem, buf, check);
-	}
-	if (check < BUFFER_SIZE)
-	{
-		ret = return_mem(mem, 0);
-		return (ret);
+		if (check > 0)
+			mem = cat_mem_buf(mem, buf, check);
 	}
 	//printf("Mem despues del bucle: %s\n", mem);
-	ret = return_mem(mem, 1);
-	mem = ret_out_mem(mem);
+	if (check == -1)
+	{
+		//printf("Entro check -1\n");
+		free(buf);
+		return (NULL);
+	} else if (line_has_n(mem))
+	{
+		//printf("Entro line_has_n(mem)\n");
+		ret = return_mem(mem, 1);
+		mem = ret_out_mem(mem);
+		free(buf);
+		return (ret);
+	} else
+	{
+		//printf("Entro !check\n");
+		if (mem[0] == '\0')
+		{
+			//printf("Entro mem[0] == /0\n");
+			free(buf);
+			free(mem);
+			return (NULL);
+		}
+		ret = return_mem(mem, 0);
+		mem = ret_out_mem(mem);
+		return (ret);
+	}
 	//printf("Mem antes de salir: %s\n", mem);
-	free(buf);
-	return (ret);
+	//system("leaks a.out");
 }
-
+/*
 int main(void)
 {
 	int	fd;
@@ -90,4 +99,4 @@ int main(void)
 		//	printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);
 	}
 	return 0;
-}
+}*/
