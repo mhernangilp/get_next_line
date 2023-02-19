@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/19 20:35:11 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/19 20:43:30 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,31 +127,3 @@ char	*return_mem(char *mem, int mode)
 	ret = ft_substr(mem, 0, len);
 	return (ret);
 }
-/*
-int main(void)
-{
-	int	fd;
-	char	*print;
-	ssize_t	nr_bytes;
-	int	num = 50;
-
-	fd = open("files/read_error.txt", O_RDONLY);
-	if (fd == -1)
-		printf("Error al abrir archivo\n");
-	else
-	{
-		do {
-			//printf("leo linea\n");
-			print = get_next_line(fd);
-			if (print)
-				printf("Sol: '%s'\n", print);
-		}while (print && --num > 0);
-		printf("%s\n", get_next_line(fd));
-		close(fd);
-		//if (!nr_bytes)
-		//	printf("Archivo vacio\n");
-		//else
-		//	printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);
-	}
-	return 0;
-}*/

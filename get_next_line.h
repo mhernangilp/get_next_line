@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 14:03:45 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/19 20:34:30 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/19 21:02:14 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
+#  define BUFFER_SIZE 10
 # endif
 
 # include <stddef.h>
