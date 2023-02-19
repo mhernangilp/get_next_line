@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/19 20:19:30 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/19 20:35:11 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,29 +47,85 @@ char	*get_next_line(int fd)
 		}
 		free(buf);
 		return (NULL);
-	} else if (line_has_n(mem) != -1)
+	}
+	else if (line_has_n(mem) != -1)
 	{
 		ret = return_mem(mem, 1);
 		mem = ret_out_mem(mem);
 		free(buf);
 		return (ret);
-	} else
+	}
+	else
 	{
-		if (mem)
+		if (mem && mem[0] == '\0')
 		{
-			if (mem[0] == '\0')
-			{
-				free(buf);
-				free(mem);
-				mem = NULL;
-				return (NULL);
-			}
+			free(buf);
+			free(mem);
+			mem = NULL;
+			return (NULL);
 		}
 		ret = return_mem(mem, 0);
 		mem = ret_out_mem(mem);
 		free(buf);
 		return (ret);
 	}
+}
+
+char	*cat_mem_buf(char *mem, char *buf, int read)
+{
+	int		i;
+	int		j;
+	char	*temp;
+
+	i = 0;
+	j = 0;
+	if (mem)
+		temp = malloc(ft_strlen(mem) + read + 1);
+	else
+		temp = malloc(read + 1);
+	if (mem)
+		while (mem[i])
+		temp[j++] = mem[i++];
+	i = 0;
+	while (read > 0)
+	{
+		temp[j++] = buf[i++];
+		read--;
+	}
+	temp[j] = '\0';
+	free(mem);
+	mem = temp;
+	return (mem);
+}
+
+char	*ret_out_mem(char *mem)
+{
+	char	*temp;
+
+	if (!mem)
+		return (NULL);
+	if (line_has_n(mem) != -1)
+		temp = ft_strdup(&mem[line_has_n(mem) + 1]);
+	else
+		temp = ft_strdup(&mem[ft_strlen(mem)]);
+	free(mem);
+	mem = temp;
+	return (mem);
+}
+
+char	*return_mem(char *mem, int mode)
+{
+	int		len;
+	char	*ret;
+
+	if (!mem)
+		return (NULL);
+	if (!mode)
+		len = ft_strlen(mem);
+	else
+		len = line_has_n(mem) + 1;
+	ret = ft_substr(mem, 0, len);
+	return (ret);
 }
 /*
 int main(void)

@@ -6,98 +6,28 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:59:58 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/19 20:13:52 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/19 20:35:13 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*cat_mem_buf(char *mem, char *buf, int read)
-{
-	int		i;
-	int		j;
-	char	*temp;
-
-	i = 0;
-	j = 0;
-	if (mem)
-		temp = malloc(ft_strlen(mem) + read + 1);
-	else
-		temp = malloc(read + 1);
-	if (mem)
-		while (mem[i])
-		{
-			temp[j] = mem[i];
-			i++;
-			j++;
-		}
-	i = 0;
-	while (read > 0)
-	{
-		temp[j] = buf[i];
-		i++;
-		j++;
-		read--;
-	}
-	temp[j] = '\0';
-	free(mem);
-	mem = temp;
-	return (mem);
-}
-
-char	*ret_out_mem(char *mem)
-{
-	char	*temp;
-
-	if (!mem)
-		return (NULL);
-	if (line_has_n(mem) != -1)
-		temp = ft_strdup(&mem[line_has_n(mem) + 1]);
-	else
-		temp = ft_strdup(&mem[ft_strlen(mem)]);
-	free(mem);
-	mem = temp;
-	return (mem);
-}
-
-char	*return_mem(char *mem, int mode)
-{
-	int		len;
-	char	*ret;
-
-	if (!mem)
-		return (NULL);
-	if (!mode)
-		len = ft_strlen(mem);
-	else
-		len = line_has_n(mem) + 1;
-	ret = ft_substr(mem, 0, len);
-	return (ret);
-}
-
 char	*ft_strdup(const char *src)
 {
 	char	*target;
+	int		i;
 
 	target = malloc(ft_strlen(src) + 1);
 	if (!target)
 		return (NULL);
-	ft_strcpy(target, src);
-	return (target);
-}
-
-char	*ft_strcpy(char *dest, const char *src)
-{
-	int	i;
-
 	i = 0;
 	while (src[i])
 	{
-		dest[i] = src[i];
+		target[i] = src[i];
 		i++;
 	}
-	dest[i] = '\0';
-	return (dest);
+	target[i] = '\0';
+	return (target);
 }
 
 static int	get_optimal_len(char const *s, unsigned int start, size_t len)
@@ -166,4 +96,3 @@ int	line_has_n(char *buf)
 	}
 	return (-1);
 }
-
