@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/17 12:53:59 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/19 19:36:26 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ char	*get_next_line(int fd)
 		//printf("Ya tenemos en mem guardado con mem: %s\n", mem);
 		ret = return_mem(mem, 1);
 		mem = ret_out_mem(mem);
+		free(buf);
+		//system("leaks a.out");
 		return (ret);
 	}
 	check = 1;
 	//printf("Mem antes de bucle: %s\n", mem);
-	//printf("Check: %ld line_has_n: %d\n", check, line_has_n(mem));
 	while (check && check != -1 && line_has_n(mem) == -1)
 	{
 		//printf("Read buffer\n");
@@ -62,22 +63,26 @@ char	*get_next_line(int fd)
 	} else
 	{
 		//printf("Entro !check\n");
-		if (mem[0] == '\0')
+		if (mem)
 		{
-			//printf("Entro mem[0] == /0\n");
-			free(buf);
-			free(mem);
-			//system("leaks a.out");  // --
-			return (NULL);
+			if (mem[0] == '\0')
+			{
+				//printf("Entro mem[0] == /0\n");
+				free(buf);
+				free(mem);
+				//system("leaks a.out");  // --
+				return (NULL);
+			}
 		}
+		//printf("No entro mem[0] == '/0'\n");
 		ret = return_mem(mem, 0);
 		mem = ret_out_mem(mem);
+		free(buf);
 		//system("leaks a.out");  // --
 		return (ret);
 	}
-	//printf("Mem antes de salir: %s\n", mem);
 }
-
+/*
 int main(void)
 {
 	int	fd;
@@ -85,7 +90,7 @@ int main(void)
 	ssize_t	nr_bytes;
 	int	num = 50;
 
-	fd = open("files/41_no_nl", O_RDONLY);
+	fd = open("files/empty", O_RDONLY);
 	if (fd == -1)
 		printf("Error al abrir archivo\n");
 	else
@@ -103,4 +108,4 @@ int main(void)
 		//	printf("El numero de char es %d, contenido: %s\n", (int)nr_bytes, buf);
 	}
 	return 0;
-}
+}*/
