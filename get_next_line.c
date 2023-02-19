@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/19 20:43:30 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/19 21:13:16 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,17 @@ char	*get_next_line(int fd)
 		free(buf);
 		return (ret);
 	}
-	else
+	else if (mem && mem[0] == '\0')
 	{
-		if (mem && mem[0] == '\0')
-		{
-			free(buf);
-			free(mem);
-			mem = NULL;
-			return (NULL);
-		}
-		ret = return_mem(mem, 0);
-		mem = ret_out_mem(mem);
 		free(buf);
-		return (ret);
+		free(mem);
+		mem = NULL;
+		return (NULL);
 	}
+	ret = return_mem(mem, 0);
+	mem = ret_out_mem(mem);
+	free(buf);
+	return (ret);
 }
 
 char	*cat_mem_buf(char *mem, char *buf, int read)
