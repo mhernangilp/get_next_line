@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/19 19:36:26 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/19 20:19:30 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,61 +24,50 @@ char	*get_next_line(int fd)
 	buf = malloc(BUFFER_SIZE);
 	if (!buf)
 		return (NULL);
-	//printf("Mem al inicio: '%s'\n", mem);
 	if (mem && line_has_n(mem) != -1)
 	{
-		//printf("Ya tenemos en mem guardado con mem: %s\n", mem);
 		ret = return_mem(mem, 1);
 		mem = ret_out_mem(mem);
 		free(buf);
-		//system("leaks a.out");
 		return (ret);
 	}
 	check = 1;
-	//printf("Mem antes de bucle: %s\n", mem);
 	while (check && check != -1 && line_has_n(mem) == -1)
 	{
-		//printf("Read buffer\n");
 		check = read(fd, buf, BUFFER_SIZE);
-		//printf("Check: %ld\n", check);
 		if (check > 0)
 			mem = cat_mem_buf(mem, buf, check);
 	}
-	//printf("Mem despues del bucle: %s\n", mem);
 	if (check == -1)
 	{
-		//printf("Entro check -1\n");
-		free(mem);  // ????
+		if (mem)
+		{
+			free(mem);
+			mem = NULL;
+		}
 		free(buf);
-		//system("leaks a.out");  // --
 		return (NULL);
 	} else if (line_has_n(mem) != -1)
 	{
-		//printf("Entro line_has_n(mem)\n");
 		ret = return_mem(mem, 1);
 		mem = ret_out_mem(mem);
 		free(buf);
-		//system("leaks a.out");  // --
 		return (ret);
 	} else
 	{
-		//printf("Entro !check\n");
 		if (mem)
 		{
 			if (mem[0] == '\0')
 			{
-				//printf("Entro mem[0] == /0\n");
 				free(buf);
 				free(mem);
-				//system("leaks a.out");  // --
+				mem = NULL;
 				return (NULL);
 			}
 		}
-		//printf("No entro mem[0] == '/0'\n");
 		ret = return_mem(mem, 0);
 		mem = ret_out_mem(mem);
 		free(buf);
-		//system("leaks a.out");  // --
 		return (ret);
 	}
 }
@@ -90,7 +79,7 @@ int main(void)
 	ssize_t	nr_bytes;
 	int	num = 50;
 
-	fd = open("files/empty", O_RDONLY);
+	fd = open("files/read_error.txt", O_RDONLY);
 	if (fd == -1)
 		printf("Error al abrir archivo\n");
 	else
@@ -101,6 +90,7 @@ int main(void)
 			if (print)
 				printf("Sol: '%s'\n", print);
 		}while (print && --num > 0);
+		printf("%s\n", get_next_line(fd));
 		close(fd);
 		//if (!nr_bytes)
 		//	printf("Archivo vacio\n");
