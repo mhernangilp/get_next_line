@@ -6,7 +6,7 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/19 21:13:16 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:12:08 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,33 +66,6 @@ char	*get_next_line(int fd)
 	mem = ret_out_mem(mem);
 	free(buf);
 	return (ret);
-}
-
-char	*cat_mem_buf(char *mem, char *buf, int read)
-{
-	int		i;
-	int		j;
-	char	*temp;
-
-	i = 0;
-	j = 0;
-	if (mem)
-		temp = malloc(ft_strlen(mem) + read + 1);
-	else
-		temp = malloc(read + 1);
-	if (mem)
-		while (mem[i])
-		temp[j++] = mem[i++];
-	i = 0;
-	while (read > 0)
-	{
-		temp[j++] = buf[i++];
-		read--;
-	}
-	temp[j] = '\0';
-	free(mem);
-	mem = temp;
-	return (mem);
 }
 
 char	*ret_out_mem(char *mem)

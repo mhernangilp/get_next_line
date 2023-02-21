@@ -6,11 +6,38 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:59:58 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/19 21:01:54 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:05:51 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*cat_mem_buf(char *mem, char *buf, int read)
+{
+	int		i;
+	int		j;
+	char	*temp;
+
+	i = 0;
+	j = 0;
+	if (mem)
+		temp = malloc(ft_strlen(mem) + read + 1);
+	else
+		temp = malloc(read + 1);
+	if (mem)
+		while (mem[i])
+		temp[j++] = mem[i++];
+	i = 0;
+	while (read > 0)
+	{
+		temp[j++] = buf[i++];
+		read--;
+	}
+	temp[j] = '\0';
+	free(mem);
+	mem = temp;
+	return (mem);
+}
 
 char	*ft_strdup(const char *src)
 {
@@ -30,20 +57,11 @@ char	*ft_strdup(const char *src)
 	return (target);
 }
 
-static int	get_optimal_len(char const *s, unsigned int start, size_t len)
-{
-	size_t	len_str;
-
-	len_str = ft_strlen(&s[start]);
-	if (len < len_str)
-		return (len);
-	return (len_str);
-}
-
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char			*t;
 	unsigned int	i;
+	unsigned int	len_str;
 
 	i = 0;
 	if (!s)
@@ -56,15 +74,14 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		t[0] = 0;
 		return (t);
 	}
-	t = malloc ((get_optimal_len(s, start, len) * sizeof(char)) + 1);
+	len_str = ft_strlen(&s[start]);
+	if (len < len_str)
+		len_str = len;
+	t = malloc (len_str * sizeof(char) + 1);
 	if (!t)
 		return (NULL);
-	while (s[start] && len > 0)
-	{
-		t[i++] = s[start];
-		len--;
-		start++;
-	}
+	while (s[start] && len-- > 0)
+		t[i++] = s[start++];
 	t[i] = '\0';
 	return ((char *) t);
 }
