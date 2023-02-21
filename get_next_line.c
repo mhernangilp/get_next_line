@@ -6,11 +6,55 @@
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/21 14:12:08 by mhernang         ###   ########.fr       */
+/*   Updated: 2023/02/21 19:57:35 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+static void	read_buffer(ssize_t *check, char **mem, char **buf, int *fd)
+{
+	while (*check && *check != -1 && line_has_n(*mem) == -1)
+	{
+		*check = read(*fd, *buf, BUFFER_SIZE);
+		if (*check > 0)
+			*mem = cat_mem_buf(*mem, *buf, *check);
+	}
+}
+
+static char	*check_result(ssize_t *check, char **mem, char **buf)
+{
+	char	*ret;
+
+	if (*check == -1)
+	{
+		if (*mem)
+		{
+			free(*mem);
+			*mem = NULL;
+		}
+		free(*buf);
+		return (NULL);
+	}
+	else if (line_has_n(*mem) != -1)
+	{
+		ret = return_mem(*mem, 1);
+		*mem = ret_out_mem(*mem);
+		free(*buf);
+		return (ret);
+	}
+	else if (*mem && *mem[0] == '\0')
+	{
+		free(*buf);
+		free(*mem);
+		*mem = NULL;
+		return (NULL);
+	}
+	ret = return_mem(*mem, 0);
+	*mem = ret_out_mem(*mem);
+	free(*buf);
+	return (ret);
+}
 
 char	*get_next_line(int fd)
 {
@@ -32,39 +76,8 @@ char	*get_next_line(int fd)
 		return (ret);
 	}
 	check = 1;
-	while (check && check != -1 && line_has_n(mem) == -1)
-	{
-		check = read(fd, buf, BUFFER_SIZE);
-		if (check > 0)
-			mem = cat_mem_buf(mem, buf, check);
-	}
-	if (check == -1)
-	{
-		if (mem)
-		{
-			free(mem);
-			mem = NULL;
-		}
-		free(buf);
-		return (NULL);
-	}
-	else if (line_has_n(mem) != -1)
-	{
-		ret = return_mem(mem, 1);
-		mem = ret_out_mem(mem);
-		free(buf);
-		return (ret);
-	}
-	else if (mem && mem[0] == '\0')
-	{
-		free(buf);
-		free(mem);
-		mem = NULL;
-		return (NULL);
-	}
-	ret = return_mem(mem, 0);
-	mem = ret_out_mem(mem);
-	free(buf);
+	read_buffer(&check, &mem, &buf, &fd);
+	ret = check_result(&check, &mem, &buf);
 	return (ret);
 }
 
