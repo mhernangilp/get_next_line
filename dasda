@@ -1,0 +1,31 @@
+static char *check_result(ssize_t *check, char **mem, char **buf)
+{
+    char *ret = NULL;
+
+    if (*check == -1)
+    {
+        if (*mem)
+        {
+            free(*mem);
+            *mem = NULL;
+        }
+    }
+    else if (line_has_n(*mem) != -1)
+    {
+        ret = return_mem(*mem, 1);
+        *mem = ret_out_mem(*mem);
+    }
+    else if (*mem && **mem == '\0')
+    {
+        free(*mem);
+        *mem = NULL;
+    }
+    else
+    {
+        ret = return_mem(*mem, 0);
+        *mem = ret_out_mem(*mem);
+    }
+
+    free(*buf);
+    return ret;
+}
