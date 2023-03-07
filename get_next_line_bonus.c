@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhernang <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/07 13:55:23 by mhernang          #+#    #+#             */
-/*   Updated: 2023/02/28 10:55:11 by mhernang         ###   ########.fr       */
+/*   Created: 2023/02/28 13:03:50 by mhernang          #+#    #+#             */
+/*   Updated: 2023/02/28 13:04:54 by mhernang         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static void	read_buffer(ssize_t *check, char **mem, char **buf, int *fd)
 {
@@ -52,7 +52,7 @@ static char	*check_result(ssize_t *check, char **mem, char **buf)
 
 char	*get_next_line(int fd)
 {
-	static char	*mem = NULL;
+	static char	*mem[1024];
 	char		*buf;
 	char		*ret;
 	ssize_t		check;
@@ -62,16 +62,16 @@ char	*get_next_line(int fd)
 	buf = malloc(BUFFER_SIZE);
 	if (!buf)
 		return (NULL);
-	if (mem && line_has_n(mem) != -1)
+	if (mem[fd] && line_has_n(mem[fd]) != -1)
 	{
-		ret = return_mem(mem, 1);
-		mem = ret_out_mem(mem);
+		ret = return_mem(mem[fd], 1);
+		mem[fd] = ret_out_mem(mem[fd]);
 		free(buf);
 		return (ret);
 	}
 	check = 1;
-	read_buffer(&check, &mem, &buf, &fd);
-	ret = check_result(&check, &mem, &buf);
+	read_buffer(&check, &mem[fd], &buf, &fd);
+	ret = check_result(&check, &mem[fd], &buf);
 	return (ret);
 }
 
