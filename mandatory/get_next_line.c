@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../get_next_line.h"
 
 static void	read_buffer(ssize_t *check, char **mem, char **buf, int *fd)
 {
